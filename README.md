@@ -1,0 +1,7 @@
+# SearchInDouBan
+查豆瓣 —— 通过复制、分享，实现快速简易查询豆瓣内容的 Android App。
+
+![GIF.gif](https://i.loli.net/2017/10/09/59dad535b3144.gif)
+
+-----
+Thanks to [Sweet Alert Dialog](https://github.com/pedant/sweet-alert-dialog)
