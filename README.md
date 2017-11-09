@@ -4,4 +4,6 @@
 ![GIF.gif](https://i.loli.net/2017/10/09/59dad535b3144.gif)
 
 -----
+下载地址: [查豆瓣](https://www.coolapk.com/apk/me.rosuh.searchindouban)
+-----
 Thanks to [Sweet Alert Dialog](https://github.com/pedant/sweet-alert-dialog)
