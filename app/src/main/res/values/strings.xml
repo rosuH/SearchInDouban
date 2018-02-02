@@ -5,4 +5,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="go_to_search">去查找</string>
+    <string name="hint_search">(⊙o⊙)</string>
+    <string name="recommend">也可以复制文字然后分享到本应用</string>
+    <string name="nothing">没有输入东西哦</string>
 </resources>
