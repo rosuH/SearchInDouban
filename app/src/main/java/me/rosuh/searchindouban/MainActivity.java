@@ -1,9 +1,6 @@
 package me.rosuh.searchindouban;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.net.Uri;
-import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,9 +18,13 @@ import android.widget.Toast;
 
 import com.daasuu.ahp.AnimateHorizontalProgressBar;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import static android.view.View.GONE;
 
 public class MainActivity extends AppCompatActivity {
+    private final static String DOUBAN_URL = "https://m.douban.com/search?query=";
     private boolean KEY_LAUNCH_STATUS = true;     // true 为分享启动，false 为手动启动
     private WebView mWebView;
     private String mUserData;
@@ -50,6 +51,12 @@ public class MainActivity extends AppCompatActivity {
         progressBar.setProgress(400);
 
         mWebView.setWebViewClient(new WebViewClient());
+        mWebSettings.setSupportMultipleWindows(false);
+        mWebSettings.setAllowFileAccessFromFileURLs(false);
+        mWebSettings.setAllowFileAccess(false);
+        mWebSettings.setAllowUniversalAccessFromFileURLs(false);
+
+
         if (mUserData == null) {
             KEY_LAUNCH_STATUS = false;
             setViewVisibility();
@@ -72,14 +79,21 @@ public class MainActivity extends AppCompatActivity {
 
     private void doSearch(String data){
         KEY_LAUNCH_STATUS = true;
+        // global search REGEX
+        String regex="[^\\u4e00-\\u9fa5\\w]";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(data);
+        data = matcher.replaceAll("");
         setViewVisibility();
-        mWebView.loadUrl("https://m.douban.com/search?query=" + data);
+        mWebView.loadUrl(DOUBAN_URL + data);
         mWebSettings.setSupportMultipleWindows(true);
         mWebView.setWebChromeClient(new WebChromeClient(){
             @Override
             public void onProgressChanged(WebView view, int progress) {
                 progressBar.setProgressWithAnim(progress*40);
             }
+
+
         });
     }
     
