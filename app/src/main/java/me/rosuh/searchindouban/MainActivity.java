@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
                         mWebView.goBack();
                         count = 0;
                     } else {
-                        if (count == 0){
+                        if (count == 0 && mUserData == null){
                             KEY_LAUNCH_STATUS = false;
                             setViewVisibility();
                             count++;

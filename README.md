@@ -6,4 +6,4 @@
 -----
 下载地址: [查豆瓣](https://www.coolapk.com/apk/me.rosuh.searchindouban)
 -----
-Thanks to [Sweet Alert Dialog](https://github.com/pedant/sweet-alert-dialog)
+Thanks to [AnimateHorizontalProgressBar](https://github.com/MasayukiSuda/AnimateHorizontalProgressBar)
