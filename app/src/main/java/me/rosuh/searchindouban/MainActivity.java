@@ -1,11 +1,15 @@
 package me.rosuh.searchindouban;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.http.SslError;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -50,7 +54,27 @@ public class MainActivity extends AppCompatActivity {
         progressBar.setMax(1000);
         progressBar.setProgress(400);
 
-        mWebView.setWebViewClient(new WebViewClient());
+        mWebView.setWebViewClient(new WebViewClient(){
+            @Override
+            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+                super.onReceivedSslError(view, handler, error);
+                handler.proceed();
+                Toast.makeText(MainActivity.this, "等待 HTTPS 响应...", Toast.LENGTH_SHORT)
+                        .show();
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                progressBar.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+                progressBar.setVisibility(View.VISIBLE);
+            }
+        });
         mWebSettings.setSupportMultipleWindows(false);
         mWebSettings.setAllowFileAccessFromFileURLs(false);
         mWebSettings.setAllowFileAccess(false);
@@ -154,5 +178,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop(){
         super.onStop();
         mWebSettings.setJavaScriptEnabled(false);
+    }
+
+    @Override
+    protected void onDestroy() {
+        if(mWebView !=null ){
+            mWebView.loadDataWithBaseURL(null, "", "text/html",
+                    "utf-8", null);
+            ((ViewGroup)mWebView.getParent()).removeView(mWebView);
+            mWebView.destroy();
+            mWebView = null;
+        }
+        super.onDestroy();
     }
 }
