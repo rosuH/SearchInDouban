@@ -20,7 +20,7 @@
             app:ahp_backgroundColor="#c1c0b9"
             app:ahp_progressColor="#537791"
             android:visibility="gone" />
-    </WebView>>
+    </WebView>
     <LinearLayout
         android:id="@+id/linear_layout_main"
         android:layout_width="match_parent"
@@ -49,7 +49,6 @@
         android:layout_height="30dp"
         android:layout_below="@+id/linear_layout_main"
         android:layout_marginStart="48dp"
-        android:layout_toEndOf="@+id/progress_bar_main"
         android:text="@string/recommend"
         android:textSize="14sp"
         android:visibility="visible"
