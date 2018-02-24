@@ -7,21 +7,20 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-    <com.daasuu.ahp.AnimateHorizontalProgressBar
-        android:id="@+id/progress_bar_main"
-        android:layout_width="match_parent"
-        android:layout_height="3dp"
-        app:ahp_backgroundColor="#c1c0b9"
-        app:ahp_progressColor="#537791"
-        android:visibility="gone" />
-
     <WebView
         android:id="@+id/web_view_content_main"
-        android:layout_below="@+id/progress_bar_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
-        android:visibility="gone"/>
+        android:visibility="gone">
+        <com.daasuu.ahp.AnimateHorizontalProgressBar
+            android:id="@+id/progress_bar_main"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            app:ahp_backgroundColor="#c1c0b9"
+            app:ahp_progressColor="#537791"
+            android:visibility="gone" />
+    </WebView>>
     <LinearLayout
         android:id="@+id/linear_layout_main"
         android:layout_width="match_parent"
