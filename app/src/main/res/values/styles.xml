@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8" ?>
 <resources>
 
     <!-- Base application theme. -->
@@ -9,6 +10,13 @@
         <item name="android:statusBarColor">#b6b6b6</item>
     </style>
 
-    <style name="SearchInDouBan" parent="AppTheme"/>
+    <style name="Theme.DialogTemplate" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowBackground">@drawable/dialog_template</item>
+    </style>
+
+    <style name="Theme.DialogTemplate.Font" parent="Theme.DialogTemplate">
+        <item name="android:textColor">#000000</item>
+    </style>
+
 
 </resources>

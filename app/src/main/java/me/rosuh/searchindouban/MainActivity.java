@@ -1,142 +1,170 @@
 package me.rosuh.searchindouban;
 
+
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.http.SslError;
+import android.content.IntentFilter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.webkit.SslErrorHandler;
-import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
+import android.view.inputmethod.EditorInfo;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-
-import com.daasuu.ahp.AnimateHorizontalProgressBar;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
+import java.util.Timer;
+import java.util.TimerTask;
 import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 
 public class MainActivity extends AppCompatActivity {
-    private final static String DOUBAN_URL = "https://m.douban.com/search?query=";
-    private boolean KEY_LAUNCH_STATUS = true;     // true 为分享启动，false 为手动启动
+    private boolean mIsVisible = true;
     private WebView mWebView;
-    private String mUserData;
-    private WebSettings mWebSettings;
+    private WebViewUtil mWebViewUtil;
     private EditText mEditText;
     private ImageButton mImageButton;
-    private AnimateHorizontalProgressBar progressBar;
+    private ProgressBar mProgressBar;
     private TextView mTextView;
-    private int count;
+    private ImageView mErrorImageView;
+    private TextView mErrorTextView;
+    private int goBackCount = 0;
+    private boolean isExit;
+
+    private IntentFilter mIntentFilter;
+    private NetworkChangeReceiver networkChangeReceiver;
+
+    private ImageButton mAboutPageButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mWebView = findViewById(R.id.web_view_content_main);
-        mWebSettings = mWebView.getSettings();
-        mUserData = getIntent().getStringExtra(Intent.EXTRA_TEXT);
+
+        mAboutPageButton = findViewById(R.id.about_image_button_main);
         mImageButton = findViewById(R.id.image_button_search_main);
-        progressBar = findViewById(R.id.progress_bar_main);
+        mProgressBar = findViewById(R.id.progress_bar_main);
         mEditText = findViewById(R.id.edit_view_main);
         mTextView = findViewById(R.id.text_view_tip_main);
+        mErrorImageView = findViewById(R.id.error_image_view_main);
+        mErrorTextView = findViewById(R.id.error_text_view_main);
+        mWebView = findViewById(R.id.web_view_content_main);
+        mErrorTextView.setVisibility(View.GONE);
+        mErrorImageView.setVisibility(View.GONE);
 
-        progressBar.setMax(1000);
-        progressBar.setProgress(400);
+        mIntentFilter = new IntentFilter();
+        mIntentFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+        networkChangeReceiver = new NetworkChangeReceiver();
+        registerReceiver(networkChangeReceiver, mIntentFilter);
 
-        mWebView.setWebViewClient(new WebViewClient(){
-            @Override
-            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-                super.onReceivedSslError(view, handler, error);
-                handler.proceed();
-                Toast.makeText(MainActivity.this, "等待 HTTPS 响应...", Toast.LENGTH_SHORT)
-                        .show();
-            }
-
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view, url);
-                progressBar.setVisibility(View.INVISIBLE);
-            }
-
-            @Override
-            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                super.onPageStarted(view, url, favicon);
-                progressBar.setVisibility(View.VISIBLE);
-            }
-        });
-        mWebSettings.setSupportMultipleWindows(false);
-        mWebSettings.setAllowFileAccessFromFileURLs(false);
-        mWebSettings.setAllowFileAccess(false);
-        mWebSettings.setAllowUniversalAccessFromFileURLs(false);
-
-
-        if (mUserData == null) {
-            KEY_LAUNCH_STATUS = false;
-            setViewVisibility();
-        }else {
-            doSearch(mUserData);
-        }
+        mWebViewUtil = new WebViewUtil();
+        mWebView = mWebViewUtil
+                .with(this)
+                .setWebView(mWebView)
+                .setProgress(mProgressBar)
+                .start();
 
         mImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String str = mEditText.getText().toString();
-                if (!str.isEmpty()){
-                    doSearch(str);
-                }else {
-                    Toast.makeText(MainActivity.this, R.string.nothing, Toast.LENGTH_SHORT).show();
-                }
+                checkInput();
+                checkNetworkAndUpdateUI();
             }
         });
-    }
 
-    private void doSearch(String data){
-        KEY_LAUNCH_STATUS = true;
-        // global search REGEX
-        String regex="[^\\u4e00-\\u9fa5\\w]";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(data);
-        data = matcher.replaceAll("");
-        setViewVisibility();
-        mWebView.loadUrl(DOUBAN_URL + data);
-        mWebSettings.setSupportMultipleWindows(true);
-        mWebView.setWebChromeClient(new WebChromeClient(){
+        mEditText.setImeOptions(EditorInfo.IME_ACTION_SEND);
+        mEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public void onProgressChanged(WebView view, int progress) {
-                progressBar.setProgressWithAnim(progress*40);
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE ||
+                        actionId == EditorInfo.IME_ACTION_SEND ||
+                        (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER
+                                && event.getAction() == KeyEvent.ACTION_DOWN)) {
+
+                    checkInput();
+                    checkNetworkAndUpdateUI();
+                }
+                return false;
             }
+        });
 
-
+        mAboutPageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, AboutPageDialog.class));
+            }
         });
     }
-    
-    private void setViewVisibility(){
-        if (KEY_LAUNCH_STATUS){
-            // 分享启动
-            mWebView.setVisibility(View.VISIBLE);
-            progressBar.setVisibility(View.VISIBLE);
 
-            mEditText.setVisibility(GONE);
-            mImageButton.setVisibility(GONE);
-            mTextView.setVisibility(GONE);
-        }else if (!KEY_LAUNCH_STATUS){
-            // 启动器启动
-            mEditText.setVisibility(View.VISIBLE);
-            mImageButton.setVisibility(View.VISIBLE);
-            mTextView.setVisibility(View.VISIBLE);
+    /**
+     * 检查网络可用性
+     */
+    private void checkNetworkAndUpdateUI(){
+        // 网络可用，已经显示了网络错误图像，表示网络已经恢复正常
+        if (NetworkUtil.isNetworkAvailableAndConnected(MainActivity.this) &&
+                mErrorImageView.getVisibility() == VISIBLE){
+            mErrorTextView.setVisibility(View.GONE);
+            mErrorImageView.setVisibility(View.GONE);
+            mWebView.setVisibility(View.VISIBLE);
+            return;
+        }
+        // 网络不可用，错误图像没有显示，WebView 显示，则表示浏览过程出错
+        if (!NetworkUtil.isNetworkAvailableAndConnected(MainActivity.this) &&
+                mWebView.getVisibility() == VISIBLE){
+            mErrorTextView.setVisibility(View.VISIBLE);
+            mErrorImageView.setVisibility(View.VISIBLE);
             mWebView.setVisibility(GONE);
-            progressBar.setVisibility(GONE);
+            return;
+        }
+        // 网络不可用，错误图像已显示，搜索栏没有显示，则表示回退到搜索页
+        if (mErrorImageView.getVisibility() == VISIBLE){
+            mErrorTextView.setVisibility(View.GONE);
+            mErrorImageView.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * 检查输入是否合法
+     * @return
+     */
+    private boolean checkInput(){
+        String str = mEditText.getText().toString();
+        if (!str.isEmpty()){
+            setViewVisibility();
+            NetworkUtil.doSearch(str, mWebView);
+            return true;
+        }else {
+            Toast.makeText(MainActivity.this, R.string.nothing, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+    }
+
+    /**
+     * 设置视图可见性
+     */
+    private void setViewVisibility(){
+        if (mIsVisible){
+            mIsVisible = false;
+            mWebView.setVisibility(VISIBLE);
+            mProgressBar.setVisibility(VISIBLE);
+
+            mEditText.setVisibility(View.GONE);
+            mImageButton.setVisibility(View.GONE);
+            mTextView.setVisibility(View.GONE);
+            mAboutPageButton.setVisibility(View.GONE);
+        }else {
+            mIsVisible = true;
+            mEditText.setVisibility(VISIBLE);
+            mImageButton.setVisibility(VISIBLE);
+            mTextView.setVisibility(VISIBLE);
+            mAboutPageButton.setVisibility(View.VISIBLE);
+
+            mWebView.setVisibility(GONE);
+            mProgressBar.setVisibility(GONE);
         }
     }
 
@@ -145,50 +173,73 @@ public class MainActivity extends AppCompatActivity {
      */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+        if ((event != null) && (event.getAction() == KeyEvent.ACTION_DOWN)) {
             switch (keyCode) {
                 case KeyEvent.KEYCODE_BACK:
                     if (mWebView.canGoBack()){
                         mWebView.goBack();
-                        count = 0;
-                    } else {
-                        if (count == 0 && mUserData == null){
-                            KEY_LAUNCH_STATUS = false;
-                            setViewVisibility();
-                            count++;
-                        }else {
-                            finish();
-                        }
-
+                        return true;
                     }
-                    Log.d("KeyEvent", keyCode + "");
+                    if (mWebView.getVisibility() == VISIBLE || mErrorImageView.getVisibility() == VISIBLE){
+                        checkNetworkAndUpdateUI();
+                        goBackCount = 1;
+                    }
+                    if (goBackCount == 1){
+                        setViewVisibility();
+                        goBackCount = 0;
+                    }else {
+                        exitAppByDoubleClick();
+                    }
                     return true;
             }
         }
         return super.onKeyDown(keyCode, event);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mWebSettings.setJavaScriptEnabled(true);
+    /**
+     * 双击退出
+     */
+    private void exitAppByDoubleClick() {
+        Timer timer;
+        if (!isExit){
+            isExit = true;
+            Toast.makeText(MainActivity.this, R.string.exit, Toast.LENGTH_SHORT)
+                    .show();
+            timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    isExit = false;
+                }
+            }, 2000);
+        }else {
+            finish();
+        }
     }
 
     @Override
-    protected void onStop(){
-        super.onStop();
-        mWebSettings.setJavaScriptEnabled(false);
+    protected void onPause() {
+        super.onPause();
+        mWebView.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mWebView.onResume();
     }
 
     @Override
     protected void onDestroy() {
-        if(mWebView !=null ){
-            mWebView.loadDataWithBaseURL(null, "", "text/html",
-                    "utf-8", null);
-            ((ViewGroup)mWebView.getParent()).removeView(mWebView);
-            mWebView.destroy();
-            mWebView = null;
-        }
         super.onDestroy();
+        mWebViewUtil.onDestroy(mWebView);
+        unregisterReceiver(networkChangeReceiver);
+    }
+
+    private class NetworkChangeReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            checkNetworkAndUpdateUI();
+        }
     }
 }

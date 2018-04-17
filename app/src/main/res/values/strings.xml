@@ -1,11 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">查豆瓣</string>
+    <string name="app_name">SearchDouban</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="go_to_search">去查找</string>
+    <string name="go_to_search">Go to search</string>
     <string name="hint_search">(⊙o⊙)</string>
-    <string name="recommend">也可以复制文字然后分享到本应用</string>
-    <string name="nothing">没有输入东西哦</string>
+    <string name="recommend">You can copy words and then share to this application.</string>
+    <string name="nothing">Nothing input.</string>
+
+    <string name="exit">Click again to exit.</string>
+
+    <string name="wait_ssl_response">Waiting SSL response&#8230;</string>
+
+    <string name="loading_str">Loading&#8230;</string>
+    <string name="error_str">Oops，It seems that your network have some issues&#8230;</string>
+    <string name="about_page">About</string>
+
+    <string name="say_hi">Hello, Welcome to use this App ：P</string>
+    <string name="home_page">My Home Page: https://www.rosuh.me </string>
+    <string name="my_blog">My blog: https://blog.rosuh.me </string>
+    <string name="project_page">This Project：https://github.com/rosuH/SearchInDouban</string>
+    <string name="feedback">Feedback can be commented on Coolapk.com
+        , You can also find my contact information on my homepage. </string>
 </resources>

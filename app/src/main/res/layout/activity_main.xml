@@ -5,6 +5,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="16dp"
     android:fitsSystemWindows="true">
 
     <WebView
@@ -13,12 +14,11 @@
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
         android:visibility="gone">
-        <com.daasuu.ahp.AnimateHorizontalProgressBar
+        <ProgressBar
             android:id="@+id/progress_bar_main"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_width="match_parent"
             android:layout_height="3dp"
-            app:ahp_backgroundColor="#c1c0b9"
-            app:ahp_progressColor="#537791"
             android:visibility="gone" />
     </WebView>
     <LinearLayout
@@ -32,6 +32,7 @@
             android:id="@+id/edit_view_main"
             android:layout_width="280dp"
             android:layout_height="wrap_content"
+            android:singleLine="true"
             android:hint="@string/hint_search"/>
         <ImageButton
             android:id="@+id/image_button_search_main"
@@ -39,18 +40,44 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:src="@drawable/ic_search"
-            android:contentDescription="@string/go_to_search"
-            android:visibility="visible" />
+            android:contentDescription="@string/go_to_search" />
     </LinearLayout>
 
     <TextView
         android:id="@+id/text_view_tip_main"
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"
         android:layout_below="@+id/linear_layout_main"
-        android:layout_marginStart="48dp"
+        android:layout_width="wrap_content"
+        android:layout_height="56dp"
+        android:layout_marginStart="30dp"
         android:text="@string/recommend"
         android:textSize="14sp"
-        android:visibility="visible"
         tools:text="@string/recommend" />
+
+    <ImageView
+        android:id="@+id/error_image_view_main"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_margin="70dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/internet_error"
+        android:contentDescription="@string/error_str"/>
+    <TextView
+        android:id="@+id/error_text_view_main"
+        android:layout_below="@id/error_image_view_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="10dp"
+        android:layout_marginTop="-40dp"
+        android:layout_centerInParent="true"
+        android:textColor="@color/colorPrimaryDark"
+        android:scrollHorizontally="false"
+        android:text="@string/error_str"/>
+    <ImageButton
+        android:id="@+id/about_image_button_main"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/about_plug"/>
 </RelativeLayout>

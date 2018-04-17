@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/logo_image_view_about"
+        android:layout_margin="50dp"
+        android:layout_centerHorizontal="true"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:src="@drawable/logo"
+        app:civ_border_color="#419fd9"/>
+    <TextView
+        android:id="@+id/hello_text_view_about"
+        android:layout_below="@id/logo_image_view_about"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:textAlignment="center"
+        android:scrollHorizontally="false"
+        android:text="@string/say_hi"/>
+    <View
+        android:id="@+id/line_about"
+        android:layout_below="@id/hello_text_view_about"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"  />
+    <TextView
+        android:id="@+id/home_page_text_view"
+        android:layout_below="@+id/line_about"
+        android:layout_marginTop="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/home_page"
+        android:autoLink="web"/>
+    <TextView
+        android:id="@+id/blog_page_text_view"
+        android:layout_below="@+id/home_page_text_view"
+        android:layout_marginTop="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/my_blog"
+        android:autoLink="web"/>
+    <TextView
+        android:id="@+id/project_page_text_view"
+        android:layout_below="@+id/blog_page_text_view"
+        android:layout_marginTop="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/project_page"
+        android:autoLink="web"/>
+    <View
+        android:id="@+id/line_bottom_about"
+        android:layout_below="@id/project_page_text_view"
+        android:layout_width="fill_parent"
+        android:layout_marginTop="20dp"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"  />
+    <TextView
+        android:id="@+id/feedback_text_view_about"
+        android:layout_below="@+id/line_bottom_about"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:padding="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/feedback"
+        android:autoLink="web"/>
+
+</RelativeLayout>
