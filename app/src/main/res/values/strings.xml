@@ -15,6 +15,8 @@
 
     <string name="loading_str">Loading&#8230;</string>
     <string name="error_str">Oops，It seems that your network have some issues&#8230;</string>
+    <string name="error_empty_data">Oops, it that a empty message?</string>
+
     <string name="about_page">About</string>
 
     <string name="say_hi">Hello, Welcome to use this App ：P</string>

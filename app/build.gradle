@@ -7,8 +7,8 @@ android {
         minSdkVersion 22
         targetSdkVersion 27
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        versionCode 8
-        versionName "2.0"
+        versionCode 9
+        versionName "2.1"
     }
     signingConfigs {
         config {

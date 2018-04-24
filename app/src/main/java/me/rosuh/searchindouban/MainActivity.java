@@ -19,9 +19,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
+/**
+ * 这个类是用来显示 App 主界面的，包括执行用户输入、搜索等；
+ * 类里包含主界面的所有组件，使用 setVisibility() 方法来控制部件显示或隐藏
+ * @author rosuh 2018-4-24 10:40:23
+ * @version 2.1
+ * @since 1.8
+ *
+ */
 public class MainActivity extends AppCompatActivity {
     private boolean mIsVisible = true;
     private WebView mWebView;
@@ -80,10 +93,12 @@ public class MainActivity extends AppCompatActivity {
         mEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE ||
-                        actionId == EditorInfo.IME_ACTION_SEND ||
-                        (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER
-                                && event.getAction() == KeyEvent.ACTION_DOWN)) {
+                boolean isActionDone = actionId == EditorInfo.IME_ACTION_DONE;
+                boolean isActionSend = actionId == EditorInfo.IME_ACTION_SEND;
+                boolean isEventAvailable = (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER
+                        && event.getAction() == KeyEvent.ACTION_DOWN);
+
+                if (isActionDone || isActionSend || isEventAvailable) {
 
                     checkInput();
                     checkNetworkAndUpdateUI();
@@ -191,6 +206,7 @@ public class MainActivity extends AppCompatActivity {
                         exitAppByDoubleClick();
                     }
                     return true;
+                default:
             }
         }
         return super.onKeyDown(keyCode, event);
@@ -200,18 +216,18 @@ public class MainActivity extends AppCompatActivity {
      * 双击退出
      */
     private void exitAppByDoubleClick() {
-        Timer timer;
+        ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
+
         if (!isExit){
             isExit = true;
             Toast.makeText(MainActivity.this, R.string.exit, Toast.LENGTH_SHORT)
                     .show();
-            timer = new Timer();
-            timer.schedule(new TimerTask() {
+            scheduledExecutorService.schedule(new Runnable() {
                 @Override
                 public void run() {
                     isExit = false;
                 }
-            }, 2000);
+            }, 2000, TimeUnit.MILLISECONDS);
         }else {
             finish();
         }
