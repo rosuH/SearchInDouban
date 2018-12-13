@@ -5,15 +5,13 @@
     android:layout_height="match_parent"
     android:padding="16dp">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <ImageView
         android:id="@+id/logo_image_view_about"
         android:layout_margin="50dp"
         android:layout_centerHorizontal="true"
         android:layout_width="96dp"
         android:layout_height="96dp"
-        android:src="@drawable/logo"
-        app:civ_border_color="#419fd9"/>
+        android:src="@drawable/logo"/>
     <TextView
         android:id="@+id/hello_text_view_about"
         android:layout_below="@id/logo_image_view_about"
