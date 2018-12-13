@@ -99,7 +99,6 @@ public class MainActivity extends AppCompatActivity {
                         && event.getAction() == KeyEvent.ACTION_DOWN);
 
                 if (isActionDone || isActionSend || isEventAvailable) {
-
                     checkInput();
                     checkNetworkAndUpdateUI();
                 }
