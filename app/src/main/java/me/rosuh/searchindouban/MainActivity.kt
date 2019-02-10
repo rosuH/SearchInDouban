@@ -6,6 +6,7 @@ import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import android.view.View.GONE
+import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.webkit.WebView
 import android.widget.ProgressBar
@@ -85,7 +86,6 @@ class MainActivity : BaseActivity() {
     private fun setViewVisibility() {
         if (isMainUIVisible) {
             web_view_content_main.visibility = VISIBLE
-            progress_bar_main.visibility = VISIBLE
             abl_main.visibility = VISIBLE
 
             edit_view_main.visibility = GONE
@@ -100,7 +100,6 @@ class MainActivity : BaseActivity() {
             about_image_button_main!!.visibility = VISIBLE
 
             web_view_content_main.visibility = GONE
-            progress_bar_main!!.visibility = GONE
             abl_main.visibility = GONE
             isMainUIVisible = true
         }
