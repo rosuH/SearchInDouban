@@ -8,6 +8,12 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:statusBarColor">#b6b6b6</item>
+        <item name="android:windowContentTransitions">true</item>
+    </style>
+
+    <style name="animate_dialog">
+        <item name="android:windowEnterAnimation">@anim/anim_in</item>
+        <item name="android:windowExitAnimation">@anim/anim_out</item>
     </style>
 
     <style name="Theme.DialogTemplate" parent="Theme.AppCompat.Dialog">

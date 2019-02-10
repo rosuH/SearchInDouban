@@ -2,7 +2,6 @@
 <resources>
     <string name="app_name">查豆瓣</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="go_to_search">去豆瓣找找看</string>
     <string name="hint_search">(⊙o⊙)</string>
     <string name="recommend">也可以复制文字然后分享到本应用</string>
@@ -19,6 +18,10 @@
     <string name="say_hi">你好，欢迎使用这个小应用 :P</string>
     <string name="home_page">我的主页：https://rosuh.me</string>
     <string name="my_blog">我的博客：https://blog.rosuh.me</string>
-    <string name="project_page">此项目主页：https://github.com/rosuH/SearchInDouban</string>
-    <string name="feedback">反馈可以在酷安评论，你也可以在上面的主页里，找到多种我的联系方式 w </string>
+    <string name="project_page">
+        · <a href="https://github.com/rosuH/SearchInDouban">开源地址</a> \n
+        · <a href="https:rosuh.me">我的主页</a> \n
+        · 可以在<a href="https://www.coolapk.com/apk/me.rosuh.searchindouban">酷安</a>评论反馈，你也可以在上面的主页里，找到多种我的联系方式 \n
+        · icon 部分来自 <a href="https://icons8.com/app">icon8</a> 和 <a href="http://iconfont.cn">iconfont</a>
+    </string>
 </resources>
