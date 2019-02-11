@@ -1,20 +1,13 @@
 package me.rosuh.searchindouban
 
-import android.app.AlertDialog
-import android.app.Dialog
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.text.method.LinkMovementMethod
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.transition.Slide
-import android.transition.Transition
-import android.view.Gravity
-import kotlinx.android.synthetic.main.about_page_dialog.*
 
 /**
  * 这个类是用来显示 App 作者信息的；
@@ -34,7 +27,7 @@ class AboutPageDialog : DialogFragment() {
         super.onActivityCreated(savedInstanceState)
         isCancelable = true
         val window = dialog.window
-        window!!.setGravity(Gravity.BOTTOM)
+        window!!.setGravity(Gravity.CENTER)
         window.setWindowAnimations(R.style.animate_dialog)
 //        window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)

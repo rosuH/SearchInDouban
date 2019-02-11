@@ -1,25 +1,19 @@
 package me.rosuh.searchindouban
 
 import android.app.SearchManager
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
-import android.net.Uri
 import android.os.Build
+import android.os.Build.VERSION
+import android.os.Build.VERSION_CODES
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.KeyEvent
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
-import android.view.View.VISIBLE
-import android.view.Window
 import android.webkit.WebView
 import android.widget.ProgressBar
 import android.widget.Toast
-import kotlinx.android.synthetic.main.activity_quick_search.*
+import kotlinx.android.synthetic.main.activity_quick_search.progress_bar_quick_search
+import kotlinx.android.synthetic.main.activity_quick_search.tb_quick_search
+import kotlinx.android.synthetic.main.activity_quick_search.web_view_quick_search
 
 /**
  * 此类的功能是：
@@ -33,6 +27,8 @@ class QuickSearchDialogActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        window.setLayout(800,1200)
+        window.setWindowAnimations(R.style.animate_dialog)
 
         val action = intent.action
         var isActionProcessText = false
@@ -40,7 +36,9 @@ class QuickSearchDialogActivity : BaseActivity() {
         var isActionSend = false
 
         if (action != null) {
-            isActionProcessText = action == Intent.ACTION_PROCESS_TEXT
+            if (VERSION.SDK_INT >= VERSION_CODES.M) {
+                isActionProcessText = action == Intent.ACTION_PROCESS_TEXT
+            }
             isActionSearchText = action == Intent.ACTION_SEARCH
             isActionSend = action == Intent.ACTION_SEND
         }
@@ -79,7 +77,7 @@ class QuickSearchDialogActivity : BaseActivity() {
         if (event != null && event.action == KeyEvent.ACTION_DOWN) {
             when (keyCode) {
                 KeyEvent.KEYCODE_BACK -> {
-                    // 如果 webview 不可以返回 并且在浏览状态
+                    // 如果 WebView 不可以返回 并且在浏览状态
                     if (!super.onKeyDown(keyCode, event)){
                         super.exitAppByDoubleClick()
                     }

@@ -1,16 +1,26 @@
 package me.rosuh.searchindouban
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.content.Context
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.view.KeyEvent
-import android.view.inputmethod.EditorInfo
-import android.widget.Toast
-import android.view.View.GONE
-import android.view.View.INVISIBLE
+import android.view.View
 import android.view.View.VISIBLE
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.webkit.WebView
 import android.widget.ProgressBar
-import kotlinx.android.synthetic.main.activity_main.*
+import android.widget.Toast
+import kotlinx.android.synthetic.main.activity_main.abl_main
+import kotlinx.android.synthetic.main.activity_main.about_image_button_main
+import kotlinx.android.synthetic.main.activity_main.edit_view_main
+import kotlinx.android.synthetic.main.activity_main.image_button_search_main
+import kotlinx.android.synthetic.main.activity_main.progress_bar_main
+import kotlinx.android.synthetic.main.activity_main.tb_activity_main
+import kotlinx.android.synthetic.main.activity_main.text_view_tip_main
+import kotlinx.android.synthetic.main.activity_main.web_view_content_main
 
 /**
  * 这个类是用来显示 App 主界面的，包括执行用户输入、搜索等；
@@ -21,11 +31,11 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : BaseActivity() {
 
     private var isMainUIVisible = true
-    private var goBackCount = 0
+    private var mShortAnimationDuration: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        mShortAnimationDuration = resources.getInteger(android.R.integer.config_mediumAnimTime)
         image_button_search_main!!.setOnClickListener {
             checkInput()
         }
@@ -39,8 +49,10 @@ class MainActivity : BaseActivity() {
 
             if (isActionDone || isActionSend || isEventAvailable) {
                 checkInput()
+                true
+            }else {
+                false
             }
-            false
         }
 
         about_image_button_main!!.setOnClickListener {
@@ -74,35 +86,66 @@ class MainActivity : BaseActivity() {
             Toast.makeText(this@MainActivity, R.string.nothing, Toast.LENGTH_SHORT).show()
             false
         } else {
+            hideSoftKeyBoard()
             setViewVisibility()
             NetworkUtil.doSearch(str, web_view_content_main)
             true
         }
     }
 
+    private fun hideSoftKeyBoard(){
+        (this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
+            .hideSoftInputFromWindow(edit_view_main.windowToken, 0)
+    }
     /**
      * 设置视图可见性
      */
     private fun setViewVisibility() {
         if (isMainUIVisible) {
-            web_view_content_main.visibility = VISIBLE
-            abl_main.visibility = VISIBLE
+            applyFadeInAnim(web_view_content_main)
+            applyFadeInAnim(abl_main)
+            applyFadeInAnim(progress_bar_main)
 
-            edit_view_main.visibility = GONE
-            image_button_search_main.visibility = GONE
-            text_view_tip_main.visibility = GONE
-            about_image_button_main.visibility = GONE
+            applyFadeOutAnim(edit_view_main)
+            applyFadeOutAnim(image_button_search_main)
+            applyFadeOutAnim(text_view_tip_main)
+            applyFadeOutAnim(about_image_button_main)
             isMainUIVisible = false
         } else {
-            edit_view_main!!.visibility = VISIBLE
-            image_button_search_main!!.visibility = VISIBLE
-            text_view_tip_main!!.visibility = VISIBLE
-            about_image_button_main!!.visibility = VISIBLE
+            applyFadeInAnim(edit_view_main)
+            applyFadeInAnim(image_button_search_main)
+            applyFadeInAnim(text_view_tip_main)
+            applyFadeInAnim(about_image_button_main)
 
-            web_view_content_main.visibility = GONE
-            abl_main.visibility = GONE
+            applyFadeOutAnim(web_view_content_main)
+            applyFadeOutAnim(abl_main)
+            applyFadeOutAnim(progress_bar_main)
             isMainUIVisible = true
         }
+    }
+
+    private fun applyFadeInAnim(view: View){
+        view.apply {
+            alpha = 0f
+            visibility = VISIBLE
+            animate()
+                .alpha(1f)
+                .translationX(0f)
+                .setDuration(mShortAnimationDuration.toLong())
+                .setListener(null)
+        }
+    }
+
+    private fun applyFadeOutAnim(view: View){
+        view.animate()
+            .alpha(0f)
+            .translationX(-200f)
+            .setDuration(mShortAnimationDuration.toLong())
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    view.visibility = View.GONE
+                }
+            })
     }
 
     /**
@@ -112,7 +155,7 @@ class MainActivity : BaseActivity() {
         if (event != null && event.action == KeyEvent.ACTION_DOWN) {
             when (keyCode) {
                 KeyEvent.KEYCODE_BACK -> {
-                    // 如果 webview 不可以返回 并且在浏览状态
+                    // 如果 webView 不可以返回 并且在浏览状态
                     if (!super.onKeyDown(keyCode, event)){
                         if (web_view_content_main.visibility == VISIBLE){
                             setViewVisibility()

@@ -31,7 +31,7 @@ class WebViewUtil {
 
     private var mContext: Context? = null
 
-    lateinit var webView: WebView
+    private lateinit var webView: WebView
 
     /**
      * 功能：保留 context
@@ -101,16 +101,19 @@ class WebViewUtil {
     private fun setClient(webView: WebView): WebViewUtil {
         webView.webViewClient = object : WebViewClient() {
             override fun onReceivedSslError(view: WebView, handler: SslErrorHandler, error: SslError) {
-                super.onReceivedSslError(view, handler, error)
                 handler.proceed()
-                Toast.makeText(mContext, R.string.wait_ssl_response, Toast.LENGTH_SHORT)
-                    .show()
             }
 
             override fun onPageFinished(view: WebView, url: String) {
                 for (i in 0..4) {
                     webView.loadUrl("javascript:(function() { document.getElementsByClassName('Advertisement')[$i].style.display = 'none'; })()")
                 }
+            }
+            override fun shouldInterceptRequest(view: WebView?, url: String?): WebResourceResponse? {
+                if (url.isNullOrEmpty() || view == null) return super.shouldInterceptRequest(view, url)
+                return if (NetworkUtil.isAdDomain(url.toString())) {
+                    createEmptyResource()
+                } else super.shouldInterceptRequest(view, url)
             }
 
             override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest): WebResourceResponse? {
@@ -119,33 +122,47 @@ class WebViewUtil {
                 } else super.shouldInterceptRequest(view, request)
             }
 
+            override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
+                if (url.isNullOrEmpty() || view == null) return super.shouldOverrideUrlLoading(view, url)
+                if (url.startsWith("douban:")) {
+                    if (url.startsWith("douban:")) {
+                        handleAppRequest(view, url)
+                        return true
+                    }
+                }
+                return super.shouldOverrideUrlLoading(view, url)
+            }
+
             override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
                 val url = request.url.toString()
-
                 if (url.startsWith("douban:")) {
-                    Log.i(TAG, "shouldOverrideUrlLoading: $url")
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                    if (intent.resolveActivity(mContext!!.packageManager) == null) {
-                        view.post {
-                            Toast.makeText(mContext, "没有安装豆瓣鸭？", Toast.LENGTH_SHORT).show()
-                            if (view.canGoBack()) {
-                                view.goBack()
-                            }
-                        }
-                    } else {
-                        mContext!!.startActivity(intent)
-                        view.post {
-                            if (view.canGoBack()) {
-                                view.goBack()
-                            }
-                        }
-                    }
+                    handleAppRequest(view, url)
                     return true
                 }
                 return super.shouldOverrideUrlLoading(view, request)
             }
         }
         return this
+    }
+
+    private fun handleAppRequest(webView: WebView, url: String) {
+        Log.i(TAG, "shouldOverrideUrlLoading: $url")
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        if (intent.resolveActivity(mContext!!.packageManager) == null) {
+            webView.post {
+                Toast.makeText(mContext, "没有安装豆瓣鸭？", Toast.LENGTH_SHORT).show()
+                if (webView.canGoBack()) {
+                    webView.goBack()
+                }
+            }
+        } else {
+            mContext!!.startActivity(intent)
+            webView.post {
+                if (webView.canGoBack()) {
+                    webView.goBack()
+                }
+            }
+        }
     }
 
     /**
@@ -179,9 +196,9 @@ class WebViewUtil {
 
     companion object {
 
-        private val VALUE_PROGRESS = 75
+        private const val VALUE_PROGRESS = 75
 
-        private val TAG = "WebViewUtil"
+        private const val TAG = "WebViewUtil"
 
         fun createEmptyResource(): WebResourceResponse {
             return WebResourceResponse("text/plain", "utf-8", ByteArrayInputStream("".toByteArray()))

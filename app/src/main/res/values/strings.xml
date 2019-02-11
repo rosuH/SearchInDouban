@@ -1,28 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">SearchDouban</string>
+    <string name="app_name">查豆瓣</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="go_to_search">Go to search</string>
+    <string name="go_to_search">去豆瓣找找看</string>
     <string name="hint_search">(⊙o⊙)</string>
-    <string name="recommend">You can copy words and then share to this application.</string>
-    <string name="nothing">Nothing input.</string>
+    <string name="recommend">也可以复制文字然后分享到本应用</string>
+    <string name="nothing">没有输入东西哦</string>
 
-    <string name="exit">Click again to exit.</string>
+    <string name="exit">再点击一次就退出哦</string>
 
-    <string name="wait_ssl_response">Waiting SSL response&#8230;</string>
+    <string name="error_empty_data">哦噢，貌似你没有选中字符？</string>
 
-    <string name="loading_str">Loading&#8230;</string>
-    <string name="error_str">Oops，It seems that your network have some issues&#8230;</string>
-    <string name="error_empty_data">Oops, it that a empty message?</string>
-
-    <string name="about_page">About</string>
-
-    <string name="say_hi">Hello, Welcome to use this App ：P</string>
-    <string name="home_page">My Home Page: https://www.rosuh.me </string>
-    <string name="my_blog">My blog: https://blog.rosuh.me </string>
-    <string name="project_page">This Project：https://github.com/rosuH/SearchInDouban</string>
-    <string name="feedback">Feedback can be commented on Coolapk.com
-        , You can also find my contact information on my homepage. </string>
+    <string name="say_hi">你好，欢迎使用这个小应用 :P</string>
+    <string name="project_page">
+        · <a href="https://github.com/rosuH/SearchInDouban">开源地址</a> \n \n
+        · <a href="https:rosuh.me">我的主页</a> \n \n
+        · 可以在<a href="https://www.coolapk.com/apk/me.rosuh.searchindouban">酷安</a>评论反馈，你也可以在上面的主页里，找到多种我的联系方式 \n \n
+        · icon 部分来自 <a href="https://icons8.com/app">icon8</a> 和 <a href="http://iconfont.cn">iconfont</a>
+    </string>
+    <string name="open_in_browser">在浏览器打开</string>
+    <string name="share_link">分享链接</string>
+    <string name="about_author">关于作者</string>
 </resources>
