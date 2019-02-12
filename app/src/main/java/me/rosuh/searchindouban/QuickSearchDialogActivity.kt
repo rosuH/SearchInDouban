@@ -6,12 +6,14 @@ import android.os.Build
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
 import android.os.Bundle
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.Toolbar
 import android.view.KeyEvent
 import android.webkit.WebView
 import android.widget.ProgressBar
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_quick_search.progress_bar_quick_search
+import kotlinx.android.synthetic.main.activity_quick_search.srl_quick_search
 import kotlinx.android.synthetic.main.activity_quick_search.tb_quick_search
 import kotlinx.android.synthetic.main.activity_quick_search.web_view_quick_search
 
@@ -71,6 +73,10 @@ class QuickSearchDialogActivity : BaseActivity() {
 
     override fun bindLayout(): Int {
         return R.layout.activity_quick_search
+    }
+
+    override fun bindSwipeRefreshLayout(): SwipeRefreshLayout {
+        return srl_quick_search
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {

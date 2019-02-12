@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.net.http.SslError
+import android.support.v4.widget.SwipeRefreshLayout
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
@@ -32,6 +33,8 @@ class WebViewUtil {
     private var mContext: Context? = null
 
     private lateinit var webView: WebView
+
+    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
     /**
      * 功能：保留 context
@@ -92,6 +95,14 @@ class WebViewUtil {
         return this
     }
 
+    fun setSwipeRefreshLayout(swipeRefreshLayout: SwipeRefreshLayout):WebViewUtil{
+        this.swipeRefreshLayout = swipeRefreshLayout
+        this.swipeRefreshLayout.setOnRefreshListener {
+            webView.reload()
+        }
+        return this
+    }
+
     /**
      * 功能： 私有的方法，用来执行对 webView Client 的常用设置
      * 1. 重写对 SSL 错误的接收方法，允许使用 HTTP 链接
@@ -105,10 +116,22 @@ class WebViewUtil {
             }
 
             override fun onPageFinished(view: WebView, url: String) {
-                for (i in 0..4) {
-                    webView.loadUrl("javascript:(function() { document.getElementsByClassName('Advertisement')[$i].style.display = 'none'; })()")
+                swipeRefreshLayout.isRefreshing = false
+                webView.evaluateJavascript(
+                    "javascript:(" +
+                            "    function() {" +
+                            "            var len = document.getElementsByClassName('Advertisement').length; " +
+                            "            for(var i = 0; i < len; i ++){" +
+                            "                document.getElementsByClassName('Advertisement')[i].style.display = 'none'" +
+                            "            }" +
+                            "            document.getElementsByClassName('download-app')[0].style.display = 'none'" +
+                            "        }" +
+                            ")()"
+                ) {
+                    print(it)
                 }
             }
+
             override fun shouldInterceptRequest(view: WebView?, url: String?): WebResourceResponse? {
                 if (url.isNullOrEmpty() || view == null) return super.shouldInterceptRequest(view, url)
                 return if (NetworkUtil.isAdDomain(url.toString())) {

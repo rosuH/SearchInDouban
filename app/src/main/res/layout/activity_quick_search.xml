@@ -19,19 +19,23 @@
             app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
     </android.support.design.widget.AppBarLayout>
-
-    <WebView
-        android:id="@+id/web_view_quick_search"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/srl_quick_search"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ProgressBar
-            android:id="@+id/progress_bar_quick_search"
-            style="?android:progressBarStyleHorizontal"
+        android:layout_height="match_parent">
+        <WebView
+            android:id="@+id/web_view_quick_search"
             android:layout_width="match_parent"
-            android:layout_height="4dp"
-            android:layout_gravity="center"
-            android:indeterminate="true"
-            />
-    </WebView>
+            android:layout_height="wrap_content">
+
+            <ProgressBar
+                android:id="@+id/progress_bar_quick_search"
+                style="?android:progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:layout_gravity="center"
+                android:indeterminate="true"
+                />
+        </WebView>
+    </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>

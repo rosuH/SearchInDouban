@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.support.annotation.LayoutRes
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.KeyEvent
@@ -28,6 +29,7 @@ abstract class BaseActivity : AppCompatActivity() {
             .with(this)
             .setWebView(bindWebView())
             .setProgress(progressBar)
+            .setSwipeRefreshLayout(bindSwipeRefreshLayout())
             .build()
     }
     private val toolbar by lazy {
@@ -54,6 +56,8 @@ abstract class BaseActivity : AppCompatActivity() {
     abstract fun bindProgressBar(): ProgressBar
     @LayoutRes
     abstract fun bindLayout(): Int
+
+    abstract fun bindSwipeRefreshLayout():SwipeRefreshLayout
 
     private fun initToolBar() {
         setSupportActionBar(toolbar)

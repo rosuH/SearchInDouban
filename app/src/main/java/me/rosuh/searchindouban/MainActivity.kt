@@ -4,6 +4,7 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.content.Context
 import android.os.Bundle
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.Toolbar
 import android.view.KeyEvent
 import android.view.View
@@ -18,6 +19,7 @@ import kotlinx.android.synthetic.main.activity_main.about_image_button_main
 import kotlinx.android.synthetic.main.activity_main.edit_view_main
 import kotlinx.android.synthetic.main.activity_main.image_button_search_main
 import kotlinx.android.synthetic.main.activity_main.progress_bar_main
+import kotlinx.android.synthetic.main.activity_main.srl_main
 import kotlinx.android.synthetic.main.activity_main.tb_activity_main
 import kotlinx.android.synthetic.main.activity_main.text_view_tip_main
 import kotlinx.android.synthetic.main.activity_main.web_view_content_main
@@ -76,6 +78,10 @@ class MainActivity : BaseActivity() {
         return R.layout.activity_main
     }
 
+    override fun bindSwipeRefreshLayout(): SwipeRefreshLayout {
+        return srl_main
+    }
+
     /**
      * 检查输入是否合法
      * @return
@@ -105,6 +111,7 @@ class MainActivity : BaseActivity() {
             applyFadeInAnim(web_view_content_main)
             applyFadeInAnim(abl_main)
             applyFadeInAnim(progress_bar_main)
+            applyFadeInAnim(srl_main)
 
             applyFadeOutAnim(edit_view_main)
             applyFadeOutAnim(image_button_search_main)
@@ -120,6 +127,7 @@ class MainActivity : BaseActivity() {
             applyFadeOutAnim(web_view_content_main)
             applyFadeOutAnim(abl_main)
             applyFadeOutAnim(progress_bar_main)
+            applyFadeOutAnim(srl_main)
             isMainUIVisible = true
         }
     }
