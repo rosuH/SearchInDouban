@@ -29,7 +29,6 @@ class AboutPageDialog : DialogFragment() {
         val window = dialog.window
         window!!.setGravity(Gravity.CENTER)
         window.setWindowAnimations(R.style.animate_dialog)
-//        window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
     }
 }
