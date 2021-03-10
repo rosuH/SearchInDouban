@@ -4,20 +4,13 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.net.http.SslError
-import android.support.v4.widget.SwipeRefreshLayout
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.SslErrorHandler
-import android.webkit.WebChromeClient
-import android.webkit.WebResourceRequest
-import android.webkit.WebResourceResponse
-import android.webkit.WebSettings
-import android.webkit.WebView
-import android.webkit.WebViewClient
+import android.webkit.*
 import android.widget.ProgressBar
 import android.widget.Toast
-
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import java.io.ByteArrayInputStream
 
 /**
@@ -117,16 +110,19 @@ class WebViewUtil {
 
             override fun onPageFinished(view: WebView, url: String) {
                 swipeRefreshLayout.isRefreshing = false
+                val adClassName = "center"
                 webView.evaluateJavascript(
-                    "javascript:(" +
-                            "    function() {" +
-                            "            var len = document.getElementsByClassName('Advertisement').length; " +
-                            "            for(var i = 0; i < len; i ++){" +
-                            "                document.getElementsByClassName('Advertisement')[i].style.display = 'none'" +
-                            "            }" +
-                            "            document.getElementsByClassName('download-app')[0].style.display = 'none'" +
-                            "        }" +
-                            ")()"
+                        """
+                            javascript:(
+                                function() {
+                                    var len = document.getElementsByClassName('$adClassName').length; 
+                                    for(var i = 0; i < len; i ++){
+                                        document.getElementsByClassName('$adClassName')[i].style.display = 'none'
+                                    }
+                                    document.getElementsByClassName('download-app')[0].style.display = 'none'
+                                }
+                            )()
+                            """
                 ) {
                     print(it)
                 }

@@ -1,12 +1,9 @@
 package me.rosuh.searchindouban
 
 import android.content.Intent
+import android.content.pm.ApplicationInfo
 import android.net.Uri
 import android.os.Bundle
-import android.support.annotation.LayoutRes
-import android.support.v4.widget.SwipeRefreshLayout
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
 import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
@@ -14,6 +11,10 @@ import android.view.Window
 import android.webkit.WebView
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.annotation.LayoutRes
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
@@ -47,6 +48,9 @@ abstract class BaseActivity : AppCompatActivity() {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(bindLayout())
         initToolBar()
+        if (0 != (applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE)) {
+            WebView.setWebContentsDebuggingEnabled(true)
+        }
     }
 
     abstract fun bindWebView(): WebView
@@ -57,7 +61,7 @@ abstract class BaseActivity : AppCompatActivity() {
     @LayoutRes
     abstract fun bindLayout(): Int
 
-    abstract fun bindSwipeRefreshLayout():SwipeRefreshLayout
+    abstract fun bindSwipeRefreshLayout(): SwipeRefreshLayout
 
     private fun initToolBar() {
         setSupportActionBar(toolbar)

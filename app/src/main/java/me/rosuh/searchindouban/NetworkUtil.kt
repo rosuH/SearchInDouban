@@ -23,12 +23,10 @@ class NetworkUtil {
          * @param webView  接收已初始化好的 WebView
          */
         fun doSearch(data: String, webView: WebView) {
-            var data = data
             // global search REGEX
             val pattern = Pattern.compile(REGEX)
             val matcher = pattern.matcher(data)
-            data = matcher.replaceAll("")
-            webView.loadUrl(DOUBAN_URL + data)
+            webView.loadUrl(DOUBAN_URL + matcher.replaceAll(""))
         }
 
         fun isAdDomain(url: String): Boolean {

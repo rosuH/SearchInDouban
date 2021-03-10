@@ -7,18 +7,14 @@ import android.os.Build
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
 import android.os.Bundle
-import android.support.v4.widget.SwipeRefreshLayout
-import android.support.v7.widget.Toolbar
 import android.util.DisplayMetrics
 import android.view.KeyEvent
 import android.view.WindowManager
 import android.webkit.WebView
 import android.widget.ProgressBar
 import android.widget.Toast
-import kotlinx.android.synthetic.main.activity_quick_search.progress_bar_quick_search
-import kotlinx.android.synthetic.main.activity_quick_search.srl_quick_search
-import kotlinx.android.synthetic.main.activity_quick_search.tb_quick_search
-import kotlinx.android.synthetic.main.activity_quick_search.web_view_quick_search
+import androidx.appcompat.widget.Toolbar
+import kotlinx.android.synthetic.main.activity_quick_search.*
 
 /**
  * 此类的功能是：
@@ -81,7 +77,7 @@ class QuickSearchDialogActivity : BaseActivity() {
         return R.layout.activity_quick_search
     }
 
-    override fun bindSwipeRefreshLayout(): SwipeRefreshLayout {
+    override fun bindSwipeRefreshLayout(): androidx.swiperefreshlayout.widget.SwipeRefreshLayout {
         return srl_quick_search
     }
 
